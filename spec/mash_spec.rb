@@ -14,10 +14,10 @@ describe Hashie::Mash do
     @mash.name.should == "Name"
   end
 
-  # it "It should test for already set values when passed a ? method" do
-  #   @mash.name?.should be_false
-  #   @mash.name = "Name"
-  #   @mash.name?.should be_true
-  # end
+  it "It should test for already set values when passed a ? method" do
+    @mash.name?.should be_false
+    @mash.name = "Name"
+    @mash.name?.should be_true
+  end
 
 end
