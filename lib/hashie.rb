@@ -15,7 +15,7 @@ module Hashie
         when "?" 
           self.has_key?(full_method[0..-2])
         when "!" 
-          self.has_key?(full_method[0..-2]) ? self[full_method[0..-2]] : nil
+          self[full_method[0..-2]] = self.class.new
         else 
           self.has_key?(full_method) ? self[full_method] : nil
       end

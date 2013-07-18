@@ -22,7 +22,8 @@ describe Hashie::Mash do
 
   it "True" do
     @mash.name = "Name"
-    @mash.name!.should == "Name"
+    @mash.name!.add = "add"
+    @mash.name.add.should == "add"
   end
 
 end
