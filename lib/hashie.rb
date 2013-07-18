@@ -8,15 +8,16 @@ module Hashie
     end
 
     def method_missing(full_method, *args, &block)
-      case full_method.to_s[-1]
+      full_method = full_method.to_s
+      case full_method[-1]
         when "=" 
-          self[full_method[0..-2].to_s] = args.first
+          self[full_method[0..-2]] = args.first
         when "?" 
-          self.has_key?(full_method[0..-2].to_s)
+          self.has_key?(full_method[0..-2])
         when "!" 
-          self.has_key?(full_method.to_s[0..-2]) ? self[full_method.to_s[0..-2]] : nil
+          self.has_key?(full_method[0..-2]) ? self[full_method[0..-2]] : nil
         else 
-          self.has_key?(full_method.to_s) ? self[full_method.to_s] : nil
+          self.has_key?(full_method) ? self[full_method] : nil
       end
     end
   end
