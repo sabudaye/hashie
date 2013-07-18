@@ -7,17 +7,17 @@ module Hashie
       
     end
 
-    def method_missing(method_name, *args, &block)
-      case method_name.to_s[-1]
-        when "="
-          self[parse[1]] = args.first
-        else
-          if self.has_key?(parse[1])
-            self[parse[1]]
-          else
-            nil
-          end
-        end
+    def method_missing(full_method, *args, &block)
+      case full_method.to_s[-1]
+        when "=" 
+          self[full_method[0..-2].to_s] = args.first
+        when "?" 
+          self.has_key?(full_method[0..-2].to_s)
+        when "!" 
+          self.has_key?(full_method.to_s[0..-2]) ? self[full_method.to_s[0..-2]] : nil
+        else 
+          self.has_key?(full_method.to_s) ? self[full_method.to_s] : nil
+      end
     end
   end
 end

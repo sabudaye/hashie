@@ -20,4 +20,9 @@ describe Hashie::Mash do
     @mash.name?.should be_true
   end
 
+  it "True" do
+    @mash.name = "Name"
+    @mash.name!.should == "Name"
+  end
+
 end
