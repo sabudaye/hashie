@@ -37,19 +37,27 @@ module Hashie
       end
     end
 
-    def check_settings
-      @@settings.each do |s_key, s_val|
-        s_val.each do |prop_key, prop_val|
-          case prop_key
-          when :required
-            if @hash[s_key].nil?
-              @hash = {}
-              raise ArgumentError
-            end
-          else
-            true
+    def check_settings(method = nil)
+      @@sett_check = lambda do |sett_hash, method_name|
+          sett_hash.each do |prop_key, prop_val|
+              case prop_key
+              when :required
+                if @hash[method_name].nil?
+                  @hash = {}
+                  raise ArgumentError
+                end
+              else
+                true
+              end
           end
+      end
+    
+      if method.nil?
+        @@settings.each do |s_key, s_val|
+          @@sett_check.call(s_val, s_key)
         end
+      else
+        @@sett_check.call(@@settings[method], method)
       end
     end
 
@@ -65,7 +73,7 @@ module Hashie
       case full_method[-1]
       when "="
         if  @@property.has_key?(clean_name)
-          define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name] = args.first ; check_settings }
+          define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name] = args.first ; check_settings[clean_name] }
           send(full_method, *args)
         else
           raise NoMethodError
