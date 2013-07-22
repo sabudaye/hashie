@@ -42,16 +42,17 @@ module Hashie
           sett_hash.each do |prop_key, prop_val|
               case prop_key
               when :required
-                if @hash[method_name].nil?
-                  @hash = {}
+                if prop_val && @hash[method_name].nil?
                   raise ArgumentError
                 end
+              when :default
+                @hash[method_name] = prop_val
               else
                 true
               end
           end
       end
-    
+
       if method.nil?
         @@settings.each do |s_key, s_val|
           @@sett_check.call(s_val, s_key)

@@ -3,6 +3,7 @@ require "spec_helper"
 class DashTest < Hashie::Dash
   property :first_name, :required => true
   property :email
+  property :race, :default => "russian"
 end
 
 describe DashTest do
@@ -25,5 +26,9 @@ describe DashTest do
 
   it "should raise no method error when initialize an nonexisten property" do
     expect{subject.last_name = "Marley"}.to raise_error(NoMethodError)
+  end
+
+  it "should return default value" do
+    expect(subject.race).to eq("russian")
   end
 end
