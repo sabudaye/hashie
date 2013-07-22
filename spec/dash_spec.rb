@@ -8,9 +8,14 @@ end
 describe DashTest do
   subject { DashTest.new(:first_name => 'Bob', :email => 'bob@mail.com') }
 
-  it "should return an existing property using []=" do
-    expect(subject[:first_name]).to eq('Bob')
-    expect(subject[:email]).to eq('bob@mail.com')
+  it "should return an existing property using method call" do
+    expect(subject.first_name).to eq('Bob')
+    expect(subject.email).to eq('bob@mail.com')
+  end
+
+  it "should save values using method call" do
+    subject.email = "bob2@mail.net"
+    expect(subject.email).to eq('bob2@mail.net')
   end
 
   # it 'should works method call for an existing property' do
