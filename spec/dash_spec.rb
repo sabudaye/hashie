@@ -18,7 +18,12 @@ describe DashTest do
     expect(subject.email).to eq('bob2@mail.net')
   end
 
+
   it 'errors out when attempting to set a required property to nil' do
     expect{subject.first_name = nil}.to raise_error(ArgumentError)
+  end
+
+  it "should raise no method error when initialize an nonexisten property" do
+    expect{subject.last_name = "Marley"}.to raise_error(NoMethodError)
   end
 end

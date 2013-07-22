@@ -31,7 +31,7 @@ module Hashie
          if @@property.has_key?(k)
            @hash[k] = v
          else
-           "raise(NoMethodError)"
+           raise NoMethodError
          end
         self.check_settings
       end
@@ -60,14 +60,18 @@ module Hashie
 
     def method_missing(full_method, *args)
       full_method = full_method.to_s
-      clean_name = full_method[0..-2]
+      clean_name = full_method[0..-2].to_sym
 
       case full_method[-1]
       when "="
-        define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name.to_sym] = args.first; self.check_settings }
-        send(full_method, *args)
+        if  @@property.has_key?(clean_name)
+          define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name] = args.first }
+          send(full_method, *args)
+        else
+          raise NoMethodError
+        end          
       else
-        @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : "aa"
+        @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : begin raise NoMethodError end
       end
     end
   end
