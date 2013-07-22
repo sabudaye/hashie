@@ -18,7 +18,7 @@ describe DashTest do
     expect(subject.email).to eq('bob2@mail.net')
   end
 
-  # it 'should works method call for an existing property' do
-  #   expect(subject.first_name).to eq('Bob')
-  # end
+  it "should raise no method error when initialize an nonexisten property" do
+    expect{subject.last_name = "Marley"}.to raise_error(NoMethodError)
+  end
 end
