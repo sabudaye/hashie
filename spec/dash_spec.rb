@@ -22,6 +22,7 @@ describe DashTest do
 
   it 'errors out when attempting to set a required property to nil' do
     expect{subject.first_name = nil}.to raise_error(ArgumentError)
+    expect(subject.first_name).to eq('Bob')
   end
 
   it "should raise no method error when initialize an nonexisten property" do
@@ -40,8 +41,9 @@ describe DashTest do
     expect{subject[:nonexisten]}.to raise_error(NoMethodError)
   end
 
-  # it "should work with calling []=" do
-  #   subject[:email] = "bob3@mail.org"
-  #   expect(subject[:email]).to eq("bob3@mail.org")
-  # end
+  it "should work with calling []=" do
+    subject[:email] = "bob3@mail.org"
+    expect(subject[:email]).to eq("bob3@mail.org")
+  end
+
 end

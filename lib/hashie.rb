@@ -26,23 +26,24 @@ module Hashie
     @@settings = Hash.new
 
     def initialize(init_hash = {})
-        @hash = Hash.new
-        init_hash.each do |k,v|
-         if @@property.has_key?(k)
-           @hash[k] = v
-         else
-           raise NoMethodError
-         end
-        self.check_settings
+      @hash = Hash.new
+      init_hash.each do |k,v|
+        if @@property.has_key?(k)
+          self.check_settings(k,v)
+          @hash[k] = v
+        else
+          raise NoMethodError
+        end
       end
+      check_settings
     end
 
-    def check_settings(method = nil)
+    def check_settings(method = nil, arg = "")
       @@sett_check = lambda do |sett_hash, method_name|
           sett_hash.each do |prop_key, prop_val|
               case prop_key
               when :required
-                if prop_val && @hash[method_name].nil?
+                if prop_val && arg.nil?
                   raise ArgumentError
                 end
               when :default
@@ -72,7 +73,7 @@ module Hashie
     end
 
     def []=(*args)
-      puts args
+      @hash[args.first.to_sym] = args.last
     end
 
     def method_missing(full_method, *args)
@@ -82,7 +83,7 @@ module Hashie
       case full_method[-1]
       when "="
         if  @@property.has_key?(clean_name)
-          define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name] = args.first ; check_settings[clean_name] }
+          define_singleton_method(full_method.to_sym) { |*args| ; self.check_settings(clean_name, args.first) ; @hash[clean_name] = args.first }
           send(full_method, *args)
         else
           raise NoMethodError
