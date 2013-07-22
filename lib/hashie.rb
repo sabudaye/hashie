@@ -67,6 +67,14 @@ module Hashie
       @@settings[prop_name] = settings
     end
 
+    def [](*args)
+      @hash.has_key?(args.first.to_sym) ? @hash[args.first.to_sym] : begin raise NoMethodError end
+    end
+
+    def []=(*args)
+      puts args
+    end
+
     def method_missing(full_method, *args)
       full_method = full_method.to_s
       clean_name = full_method[0..-2].to_sym
@@ -80,7 +88,7 @@ module Hashie
           raise NoMethodError
         end          
       else
-        @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : begin raise NoMethodError end
+        @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : begin raise NoMethodError, "#{full_method} #{args}" end
       end
     end
   end

@@ -31,4 +31,17 @@ describe DashTest do
   it "should return default value" do
     expect(subject.race).to eq("russian")
   end
+
+  it "should respond value when call method using []" do
+    expect(subject[:first_name]).to eq('Bob')
+  end
+
+  it "should raise error when calling not existing key" do
+    expect{subject[:nonexisten]}.to raise_error(NoMethodError)
+  end
+
+  # it "should work with calling []=" do
+  #   subject[:email] = "bob3@mail.org"
+  #   expect(subject[:email]).to eq("bob3@mail.org")
+  # end
 end
