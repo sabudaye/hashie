@@ -20,8 +20,11 @@ module Hashie
   end
 
   class Dash
+    SETTINGS_ARRAY = [ :default, :required ]
+
     @@property = Hash.new
     @@settings = Hash.new
+
     def initialize(init_hash = {})
         @hash = Hash.new
         init_hash.each do |k,v|
@@ -30,6 +33,23 @@ module Hashie
          else
            "raise(NoMethodError)"
          end
+        self.check_settings
+      end
+    end
+
+    def check_settings
+      @@settings.each do |s_key, s_val|
+        s_val.each do |prop_key, prop_val|
+          case prop_key
+          when :required
+            if @hash[s_key].nil?
+              @hash = {}
+              raise ArgumentError
+            end
+          else
+            true
+          end
+        end
       end
     end
 
@@ -44,7 +64,7 @@ module Hashie
 
       case full_method[-1]
       when "="
-        define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name.to_sym] = args.first }
+        define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name.to_sym] = args.first; self.check_settings }
         send(full_method, *args)
       else
         @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : "aa"

@@ -18,7 +18,7 @@ describe DashTest do
     expect(subject.email).to eq('bob2@mail.net')
   end
 
-  # it 'should works method call for an existing property' do
-  #   expect(subject.first_name).to eq('Bob')
-  # end
+  it 'errors out when attempting to set a required property to nil' do
+    expect{subject.first_name = nil}.to raise_error(ArgumentError)
+  end
 end
