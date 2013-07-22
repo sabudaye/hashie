@@ -6,6 +6,10 @@ class DashTest < Hashie::Dash
   property :race, :default => "russian"
 end
 
+class DashTest2 < Hashie::Dash
+  property :test, :default => "test"
+end
+
 describe DashTest do
   subject { DashTest.new(:first_name => 'Bob', :email => 'bob@mail.com') }
 
@@ -44,6 +48,10 @@ describe DashTest do
   it "should work with calling []=" do
     subject[:email] = "bob3@mail.org"
     expect(subject[:email]).to eq("bob3@mail.org")
+  end
+
+  it "should raise error when calling not existing key" do
+    expect{subject[:test]}.to raise_error(NoMethodError)
   end
 
 end
