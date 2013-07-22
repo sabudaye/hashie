@@ -65,7 +65,7 @@ module Hashie
       case full_method[-1]
       when "="
         if  @@property.has_key?(clean_name)
-          define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name] = args.first }
+          define_singleton_method(full_method.to_sym) { |*args| @hash[clean_name] = args.first ; check_settings }
           send(full_method, *args)
         else
           raise NoMethodError
