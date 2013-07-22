@@ -30,7 +30,16 @@ module Hashie
     end
   end
 
-  class Dash < Hash
+  class Dash
     
+    def self.property(prop_name, settings = {})
+      puts settings unless settings.empty?
+    end
+
+    def initialize(hash = {})
+      hash.each do |key, value|
+        self[key] = value
+      end
+    end
   end
 end
