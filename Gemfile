@@ -6,4 +6,5 @@ group :development do
   gem 'rspec'
   gem 'guard-rspec'
   gem 'coveralls', require: false
+  gem 'pry'
 end
