@@ -20,15 +20,22 @@ module Hashie
   end
 
   class Dash
-    SETTINGS_ARRAY = [ :default, :required ]
-
-    @@property = Hash.new
-    @@settings = Hash.new
+    class << self
+      attr_accessor :prop, :set
+      def property(prop_name, settings = {})
+         @prop ||= Hash.new
+         @set ||= Hash.new
+         @prop[prop_name] =  ""
+         @set[prop_name] = settings
+      end 
+    end
 
     def initialize(init_hash = {})
       @hash = Hash.new
+      @property = self.class.prop
+      @settings = self.class.set
       init_hash.each do |k,v|
-        if @@property.has_key?(k)
+        if @property.has_key?(k)
           self.check_settings(k,v)
           @hash[k] = v
         else
@@ -39,7 +46,7 @@ module Hashie
     end
 
     def check_settings(method = nil, arg = "")
-      @@sett_check = lambda do |sett_hash, method_name|
+      @sett_check = lambda do |sett_hash, method_name|
           sett_hash.each do |prop_key, prop_val|
               case prop_key
               when :required
@@ -55,17 +62,12 @@ module Hashie
       end
 
       if method.nil?
-        @@settings.each do |s_key, s_val|
-          @@sett_check.call(s_val, s_key)
+        @settings.each do |s_key, s_val|
+          @sett_check.call(s_val, s_key)
         end
       else
-        @@sett_check.call(@@settings[method], method)
+        @sett_check.call(@settings[method], method)
       end
-    end
-
-    def self.property(prop_name, settings = {})
-      @@property[prop_name] =  ""
-      @@settings[prop_name] = settings
     end
 
     def [](*args)
@@ -82,7 +84,7 @@ module Hashie
 
       case full_method[-1]
       when "="
-        if  @@property.has_key?(clean_name)
+        if  @property.has_key?(clean_name)
           define_singleton_method(full_method.to_sym) { |*args| ; self.check_settings(clean_name, args.first) ; @hash[clean_name] = args.first }
           send(full_method, *args)
         else
