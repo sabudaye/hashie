@@ -21,7 +21,7 @@ module Hashie
 
   class Dash
     class << self
-      attr_accessor :prop, :set
+      attr_reader :prop, :set
       def property(prop_name, settings = {})
          @prop ||= Hash.new
          @set ||= Hash.new
