@@ -196,7 +196,7 @@ module Hashie
       when "!" 
         # define_singleton_method(full_method) { self[clean_name] = self.class.new }
       else 
-        define_singleton_method(full_method) { |args| self[full_method.to_sym] = self.class.new }
+        define_singleton_method(full_method) { |args| self[full_method.to_sym] = args; self }
       end
       send(full_method, *args)
     end
