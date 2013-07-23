@@ -187,4 +187,18 @@ module Hashie
     end
 
   end
+
+  class Clash < Hash
+    def method_missing(full_method, *args)
+      full_method = full_method.to_s
+      clean_name = full_method[0..-2]
+      case full_method[-1]
+      when "!" 
+        # define_singleton_method(full_method) { self[clean_name] = self.class.new }
+      else 
+        define_singleton_method(full_method) { |args| self[full_method.to_sym] = self.class.new }
+      end
+      send(full_method, *args)
+    end
+  end
 end
