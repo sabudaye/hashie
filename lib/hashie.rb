@@ -151,6 +151,14 @@ module Hashie
         @sett_check.call(@settings[method], method)
       end
     end
+
+    def [](*args)
+      @hash.has_key?(args.first.to_sym) ? @hash[args.first.to_sym] : begin raise NoMethodError end
+    end
+
+    def []=(*args)
+      @hash[args.first.to_sym] = args.last
+    end
     
     def method_missing(full_method, *args)
       full_method = full_method.to_s

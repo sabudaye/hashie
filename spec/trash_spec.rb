@@ -5,12 +5,15 @@ class TrashTest < Hashie::Trash
 end
 
 describe TrashTest do
-  subject { TrashTest.new(:first_name => 'Bob') }
+  subject { TrashTest.new(:firstName => 'Alex') }
 
   it "should give access with CamelCase key or underscore key" do
-    a = TrashTest.new(:firstName => 'Alex')
-    expect(a.first_name).to eq('Alex')
-    expect(a.firstName).to eq('Alex')
+    expect(subject.first_name).to eq('Alex')
+    expect(subject.firstName).to eq('Alex')
   end
 
+  it "should save data on property key when using 'from' key" do
+    subject.firstName = "Bob"
+    expect(subject.first_name).to eq('Bob')
+  end
 end
