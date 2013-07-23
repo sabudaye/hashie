@@ -167,13 +167,21 @@ module Hashie
       case full_method[-1]
       when "="
         if  @property.has_key?(clean_name)
-          define_singleton_method(full_method.to_sym) { |*args| ; self.check_settings(clean_name, args.first) ; @hash[clean_name] = args.first }
+          define_singleton_method(full_method.to_sym) { |*args| ; self.check_settings(clean_name, args.first) ; @hash[clean_name] = args.first; self.set_equivalent(clean_name) }
           send(full_method, *args)
         else
           raise NoMethodError
         end          
       else
         @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : begin raise NoMethodError, "#{full_method} #{args}" end
+      end
+    end
+
+    def set_equivalent(hash_key)
+      @settings.each do |s_key,s_val|
+        if s_val.has_key?(:from)
+          hash_key == s_val[:from] ? @hash[s_key] = @hash[hash_key] : @hash[s_val[:from]] = @hash[s_key]
+        end
       end
     end
 

@@ -15,5 +15,7 @@ describe TrashTest do
   it "should save data on property key when using 'from' key" do
     subject.firstName = "Bob"
     expect(subject.first_name).to eq('Bob')
+    subject.first_name = "Dima"
+    expect(subject.firstName).to eq('Dima')
   end
 end
