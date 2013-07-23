@@ -95,4 +95,24 @@ module Hashie
       end
     end
   end
+
+  class Trash
+    class << self
+      attr_accessor :name, :set
+
+      def property(prop_name, settings = {})
+         @name ||= Hash.new
+         @set ||= Hash.new
+         @name[prop_name] =  ""
+         @set[prop_name] = settings
+      end 
+    end
+
+    def initialize(init_hash = {})
+      
+    end
+
+    
+
+  end
 end
