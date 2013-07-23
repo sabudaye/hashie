@@ -140,23 +140,6 @@ module Hashie
                 true
               end
           end
-    end
-
-      def method_missing(full_method, *args)
-        full_method = full_method.to_s
-        clean_name = full_method[0..-2].to_sym
-
-        case full_method[-1]
-        when "="
-          if  @property.has_key?(clean_name)
-            define_singleton_method(full_method.to_sym) { |*args| ; self.check_settings(clean_name, args.first) ; @hash[clean_name] = args.first }
-            send(full_method, *args)
-          else
-            raise NoMethodError
-          end          
-        else
-          @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : begin raise NoMethodError, "#{full_method} #{args}" end
-        end
       end
 
       if method.nil?
@@ -165,6 +148,23 @@ module Hashie
         end
       else
         @sett_check.call(@settings[method], method)
+      end
+    end
+    
+    def method_missing(full_method, *args)
+      full_method = full_method.to_s
+      clean_name = full_method[0..-2].to_sym
+
+      case full_method[-1]
+      when "="
+        if  @property.has_key?(clean_name)
+          define_singleton_method(full_method.to_sym) { |*args| ; self.check_settings(clean_name, args.first) ; @hash[clean_name] = args.first }
+          send(full_method, *args)
+        else
+          raise NoMethodError
+        end          
+      else
+        @hash.has_key?(full_method.to_sym) ? @hash[full_method.to_sym] : begin raise NoMethodError, "#{full_method} #{args}" end
       end
     end
 
