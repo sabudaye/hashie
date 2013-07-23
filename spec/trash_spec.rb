@@ -18,4 +18,9 @@ describe TrashTest do
     subject.first_name = "Dima"
     expect(subject.firstName).to eq('Dima')
   end
+
+  it "should work with calling []=" do
+    expect(subject[:firstName]).to eq("Dima")
+    expect(subject[:first_name]).to eq("Dima")
+  end
 end
