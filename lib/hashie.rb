@@ -158,6 +158,7 @@ module Hashie
 
     def []=(*args)
       @hash[args.first.to_sym] = args.last
+      self.set_equivalent(args.first.to_sym)
     end
     
     def method_missing(full_method, *args)
