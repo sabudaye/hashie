@@ -192,13 +192,27 @@ module Hashie
     def method_missing(full_method, *args)
       full_method = full_method.to_s
       clean_name = full_method[0..-2]
-      case full_method[-1]
-      when "!" 
-        # define_singleton_method(full_method) { self[clean_name] = self.class.new }
-      else 
-        define_singleton_method(full_method) { |args| self[full_method.to_sym] = args; self }
+      @stack_hash = {}
+      if full_method == "_end!"
+        self[@stack_hash[:key]] = @stack_hash[:stack]
+        @stack_hash = {}
+        self
+      else
+        case full_method[-1]
+        when "!" 
+          @stack_hash[:key] = clean_name.to_sym
+          self
+        else
+          if @stack_hash[:key].nil? 
+            define_singleton_method(full_method) { |args| self[full_method.to_sym] = args; self }
+            puts args
+            send(full_method, *args)
+          else
+            @stack_hash[:stack][full_method.to_sym] = args
+            self
+          end
+        end
       end
-      send(full_method, *args)
     end
   end
 end
